@@ -1,6 +1,9 @@
 import { requireUser } from "@/lib/auth/require-user";
 import WaterQuickAdd from "./water-quick-add";
 
+export const dynamic = "force-dynamic";
+
+
 export default async function TrackerPage() {
   await requireUser();
 
