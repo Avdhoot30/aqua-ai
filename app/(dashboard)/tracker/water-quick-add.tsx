@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { addWater } from "@/app/tracker/actions";
+import { addWater } from "./actions";
 
 const amounts = [250, 350, 500, 750];
 
