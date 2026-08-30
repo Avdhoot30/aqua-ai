@@ -4,35 +4,37 @@ on:
   push:
     branches:
       - main
-      - develop
 
   pull_request:
     branches:
       - main
-      - develop
 
 jobs:
   quality:
+    name: Quality checks
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Run lint
+      - name: Lint
         run: npm run lint
 
       - name: Type check
         run: npx tsc --noEmit
 
-      - name: Build application
+      - name: Unit tests
+        run: npm run test
+
+      - name: Build
         run: npm run build

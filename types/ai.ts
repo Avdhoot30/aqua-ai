@@ -28,10 +28,7 @@ export type AIHydrationContext = {
   };
 };
 
-export type AIMessageRole =
-  | "user"
-  | "assistant"
-  | "system";
+export type AIMessageRole = "user" | "assistant" | "system";
 
 export type AIMessage = {
   id: string;
@@ -48,4 +45,14 @@ export type AIConversation = {
   archived: boolean;
   created_at: string;
   updated_at: string;
+};
+
+export type AIDailyInsight = {
+  id: string;
+  user_id: string;
+  insight_date: string;
+  summary: string;
+  recommendation: string | null;
+  severity: "normal" | "positive" | "warning";
+  created_at: string;
 };
