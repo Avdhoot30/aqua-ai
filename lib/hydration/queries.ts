@@ -1,7 +1,10 @@
 import { createClient } from "@/lib/supabase/server";
 import { WaterLog } from "@/types/hydration";
+import { getDayBoundsUtc } from "@/lib/date/timezone";
 
-export async function getActiveHydrationGoal(userId: string) {
+export async function getActiveHydrationGoal(
+  userId: string,
+) {
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -9,7 +12,9 @@ export async function getActiveHydrationGoal(userId: string) {
     .select("*")
     .eq("user_id", userId)
     .eq("is_active", true)
-    .order("effective_from", { ascending: false })
+    .order("effective_from", {
+      ascending: false,
+    })
     .limit(1)
     .maybeSingle();
 
@@ -20,16 +25,33 @@ export async function getActiveHydrationGoal(userId: string) {
   return data;
 }
 
-export async function getTodayWaterLogs(
+export async function getUserTimezone(
   userId: string,
-): Promise<WaterLog[]> {
+) {
   const supabase = await createClient();
 
-  const start = new Date();
-  start.setHours(0, 0, 0, 0);
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("timezone")
+    .eq("id", userId)
+    .maybeSingle();
 
-  const end = new Date(start);
-  end.setDate(end.getDate() + 1);
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data?.timezone ?? "UTC";
+}
+
+export async function getTodayWaterLogs(
+  userId: string,
+) {
+  const supabase = await createClient();
+
+  const timezone = await getUserTimezone(userId);
+
+  const { startUtc, endUtc } =
+    getDayBoundsUtc(timezone);
 
   const { data, error } = await supabase
     .from("water_logs")
@@ -37,9 +59,11 @@ export async function getTodayWaterLogs(
       "id, amount_ml, beverage_type, logged_at, source",
     )
     .eq("user_id", userId)
-    .gte("logged_at", start.toISOString())
-    .lt("logged_at", end.toISOString())
-    .order("logged_at", { ascending: false });
+    .gte("logged_at", startUtc)
+    .lt("logged_at", endUtc)
+    .order("logged_at", {
+      ascending: false,
+    });
 
   if (error) {
     throw new Error(error.message);
@@ -48,7 +72,9 @@ export async function getTodayWaterLogs(
   return (data ?? []) as WaterLog[];
 }
 
-export async function getTodayHydration(userId: string) {
+export async function getTodayHydration(
+  userId: string,
+) {
   const [goal, logs] = await Promise.all([
     getActiveHydrationGoal(userId),
     getTodayWaterLogs(userId),
@@ -59,12 +85,15 @@ export async function getTodayHydration(userId: string) {
     0,
   );
 
-  const goalMl = goal?.daily_target_ml ?? 2800;
+  const goalMl =
+    goal?.daily_target_ml ?? 2800;
 
   const percentage =
     goalMl > 0
       ? Math.min(
-          Math.round((totalMl / goalMl) * 100),
+          Math.round(
+            (totalMl / goalMl) * 100,
+          ),
           100,
         )
       : 0;
@@ -75,6 +104,9 @@ export async function getTodayHydration(userId: string) {
     totalMl,
     goalMl,
     percentage,
-    remainingMl: Math.max(goalMl - totalMl, 0),
+    remainingMl: Math.max(
+      goalMl - totalMl,
+      0,
+    ),
   };
 }
