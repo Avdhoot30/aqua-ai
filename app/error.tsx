@@ -27,8 +27,7 @@ export default function GlobalError({
         </h1>
 
         <p className="mt-3 text-muted-foreground">
-          AquaAI couldn't complete that request.
-          Please try again.
+          {"AquaAI couldn't complete that request. Please try again."}
         </p>
 
         <button

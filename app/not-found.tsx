@@ -13,7 +13,7 @@ export default function NotFound() {
         </h1>
 
         <p className="mt-3 text-muted-foreground">
-          The page you're looking for doesn't exist.
+          {"The page you're looking for doesn't exist."}
         </p>
 
         <Link

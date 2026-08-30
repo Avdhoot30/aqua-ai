@@ -84,7 +84,7 @@ export default async function DashboardContent() {
         </h1>
 
         <p className="mt-2 text-muted-foreground">
-          Here's how your hydration is looking today.
+          {"Here's how your hydration is looking today."}
         </p>
       </section>
 
@@ -104,7 +104,7 @@ export default async function DashboardContent() {
 
                   <div>
                     <p className="text-sm text-muted-foreground">
-                      Today's hydration
+                      {"Today's hydration"}
                     </p>
 
                     <p className="font-semibold">Keep your momentum going</p>
