@@ -53,14 +53,14 @@ export default function HomePage() {
               </Link>
 
               <Link
-                href="/login"
+                href="/auth/login"
                 className="text-sm text-slate-300 transition hover:text-white"
               >
                 Login
               </Link>
 
               <Link
-                href="/signup"
+                href="/auth/sign-up"
                 className="rounded-lg bg-white px-4 py-2 text-sm font-medium text-slate-950 transition hover:bg-slate-200"
               >
                 Get started

@@ -1,26 +1,31 @@
 "use client";
 
-import { useTransition, useState } from "react";
+import { useState, useTransition } from "react";
 import { Check, Droplets } from "lucide-react";
+
 import { addWater } from "@/app/(dashboard)/tracker/actions";
 
-const amounts = [250, 350, 500, 750];
+const amounts = [250, 350, 500, 750] as const;
 
 export function WaterQuickAdd() {
-  const [isPending, startTransition] = useTransition();
-  const [success, setSuccess] = useState<number | null>(null);
+  const [isPending, startTransition] =
+    useTransition();
+
+  const [success, setSuccess] =
+    useState<number | null>(null);
 
   function handleAdd(amount: number) {
     setSuccess(null);
 
     startTransition(async () => {
       try {
-        await addWater(amount);
+        await addWater(amount, "water");
+
         setSuccess(amount);
 
-        setTimeout(() => {
+        window.setTimeout(() => {
           setSuccess(null);
-        }, 1500);
+        }, 1200);
       } catch (error) {
         console.error(error);
       }
@@ -35,27 +40,29 @@ export function WaterQuickAdd() {
         </div>
 
         <div>
-          <h2 className="font-semibold">Log water</h2>
+          <h2 className="font-semibold">
+            Quick add
+          </h2>
 
           <p className="text-sm text-muted-foreground">
-            Add your latest drink.
+            Log water with one tap.
           </p>
         </div>
       </div>
 
       <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {amounts.map((amount) => {
-          const isSuccess = success === amount;
+          const added = success === amount;
 
           return (
             <button
               key={amount}
               type="button"
-              onClick={() => handleAdd(amount)}
               disabled={isPending}
-              className="relative rounded-xl border border-cyan-400/20 bg-cyan-400/5 px-4 py-4 text-sm font-semibold text-cyan-300 transition hover:bg-cyan-400/10 disabled:cursor-not-allowed disabled:opacity-50"
+              onClick={() => handleAdd(amount)}
+              className="rounded-xl border border-cyan-400/20 bg-cyan-400/5 px-4 py-4 font-semibold text-cyan-300 transition hover:bg-cyan-400/10 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {isSuccess ? (
+              {added ? (
                 <span className="flex items-center justify-center gap-2">
                   <Check className="size-4" />
                   Added

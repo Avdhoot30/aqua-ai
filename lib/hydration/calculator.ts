@@ -1,4 +1,7 @@
-export type ActivityLevel = "low" | "moderate" | "high";
+export type ActivityLevel =
+  | "low"
+  | "moderate"
+  | "high";
 
 export type HydrationInput = {
   weightKg: number;
@@ -8,11 +11,15 @@ export type HydrationInput = {
 
 export type HydrationResult = {
   baseTargetMl: number;
+  activityAdjustmentMl: number;
   exerciseAdjustmentMl: number;
   recommendedTargetMl: number;
 };
 
-const ACTIVITY_ADJUSTMENTS: Record<ActivityLevel, number> = {
+const ACTIVITY_ADJUSTMENTS: Record<
+  ActivityLevel,
+  number
+> = {
   low: 0,
   moderate: 250,
   high: 500,
@@ -21,22 +28,25 @@ const ACTIVITY_ADJUSTMENTS: Record<ActivityLevel, number> = {
 export function calculateHydration(
   input: HydrationInput,
 ): HydrationResult {
-  const weightBasedTarget = input.weightKg * 35;
+  const baseTargetMl = Math.round(
+    input.weightKg * 35,
+  );
 
-  const activityAdjustment =
+  const activityAdjustmentMl =
     ACTIVITY_ADJUSTMENTS[input.activityLevel];
 
-  const exerciseAdjustment =
+  const exerciseAdjustmentMl =
     Math.round(input.exerciseMinutes / 30) * 250;
 
-  const recommendedTarget =
-    weightBasedTarget +
-    activityAdjustment +
-    exerciseAdjustment;
+  const recommendedTargetMl =
+    baseTargetMl +
+    activityAdjustmentMl +
+    exerciseAdjustmentMl;
 
   return {
-    baseTargetMl: Math.round(weightBasedTarget),
-    exerciseAdjustmentMl: exerciseAdjustment,
-    recommendedTargetMl: Math.round(recommendedTarget),
+    baseTargetMl,
+    activityAdjustmentMl,
+    exerciseAdjustmentMl,
+    recommendedTargetMl,
   };
 }
