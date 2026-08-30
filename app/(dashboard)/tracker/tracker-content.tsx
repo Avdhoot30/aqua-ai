@@ -31,7 +31,7 @@ export async function TrackerContent() {
       <section className="mt-8 grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
         <div className="rounded-2xl border bg-card p-6">
           <p className="text-sm text-muted-foreground">
-            Today's intake
+            {"Today's intake"}
           </p>
 
           <p className="mt-3 text-5xl font-bold">
@@ -85,7 +85,7 @@ export async function TrackerContent() {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="font-semibold">
-              Today's timeline
+              {"Today's timeline"}
             </h2>
 
             <p className="text-sm text-muted-foreground">

@@ -3,17 +3,11 @@
 import { useState, useTransition } from "react";
 import { completeOnboarding } from "./actions";
 
-const steps = [
-  "About you",
-  "Activity",
-  "Schedule",
-  "Your goal",
-];
+const steps = ["About you", "Activity", "Schedule", "Your goal"];
 
 export function OnboardingForm() {
   const [step, setStep] = useState(0);
-  const [isPending, startTransition] =
-    useTransition();
+  const [isPending, startTransition] = useTransition();
 
   const [form, setForm] = useState({
     fullName: "",
@@ -25,17 +19,12 @@ export function OnboardingForm() {
     exerciseMinutes: "30",
     wakeTime: "07:00",
     sleepTime: "23:00",
-    timezone:
-      Intl.DateTimeFormat().resolvedOptions()
-        .timeZone,
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
   });
 
   const [error, setError] = useState("");
 
-  function updateField(
-    field: string,
-    value: string,
-  ) {
+  function updateField(field: string, value: string) {
     setForm((current) => ({
       ...current,
       [field]: value,
@@ -52,9 +41,7 @@ export function OnboardingForm() {
         !form.heightCm ||
         !form.weightKg
       ) {
-        setError(
-          "Please complete all required fields.",
-        );
+        setError("Please complete all required fields.");
         return;
       }
     }
@@ -64,9 +51,7 @@ export function OnboardingForm() {
 
   function previous() {
     setError("");
-    setStep((current) =>
-      Math.max(current - 1, 0),
-    );
+    setStep((current) => Math.max(current - 1, 0));
   }
 
   function submit() {
@@ -77,9 +62,7 @@ export function OnboardingForm() {
         ...form,
         heightCm: Number(form.heightCm),
         weightKg: Number(form.weightKg),
-        exerciseMinutes: Number(
-          form.exerciseMinutes,
-        ),
+        exerciseMinutes: Number(form.exerciseMinutes),
       });
 
       if (result?.error) {
@@ -88,10 +71,9 @@ export function OnboardingForm() {
     });
   }
 
-  const estimatedGoal =
-    form.weightKg
-      ? Math.round(Number(form.weightKg) * 35)
-      : 0;
+  const estimatedGoal = form.weightKg
+    ? Math.round(Number(form.weightKg) * 35)
+    : 0;
 
   return (
     <div className="w-full max-w-2xl">
@@ -101,9 +83,7 @@ export function OnboardingForm() {
             Step {step + 1} of {steps.length}
           </span>
 
-          <span className="text-sm text-muted-foreground">
-            {steps[step]}
-          </span>
+          <span className="text-sm text-muted-foreground">{steps[step]}</span>
         </div>
 
         <div className="h-2 overflow-hidden rounded-full bg-muted">
@@ -126,13 +106,10 @@ export function OnboardingForm() {
         {step === 0 && (
           <div className="space-y-6">
             <div>
-              <h1 className="text-2xl font-bold">
-                Tell us about yourself
-              </h1>
+              <h1 className="text-2xl font-bold">Tell us about yourself</h1>
 
               <p className="mt-2 text-muted-foreground">
-                This helps AquaAI personalize your
-                hydration target.
+                This helps AquaAI personalize your hydration target.
               </p>
             </div>
 
@@ -143,12 +120,7 @@ export function OnboardingForm() {
 
               <input
                 value={form.fullName}
-                onChange={(e) =>
-                  updateField(
-                    "fullName",
-                    e.target.value,
-                  )
-                }
+                onChange={(e) => updateField("fullName", e.target.value)}
                 placeholder="Your name"
                 className="w-full rounded-xl border bg-background px-4 py-3 outline-none focus:border-cyan-400"
               />
@@ -162,46 +134,26 @@ export function OnboardingForm() {
               <input
                 type="date"
                 value={form.dateOfBirth}
-                onChange={(e) =>
-                  updateField(
-                    "dateOfBirth",
-                    e.target.value,
-                  )
-                }
+                onChange={(e) => updateField("dateOfBirth", e.target.value)}
                 className="w-full rounded-xl border bg-background px-4 py-3 outline-none focus:border-cyan-400"
               />
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium">
-                Sex
-              </label>
+              <label className="mb-2 block text-sm font-medium">Sex</label>
 
               <select
                 value={form.sex}
-                onChange={(e) =>
-                  updateField(
-                    "sex",
-                    e.target.value,
-                  )
-                }
+                onChange={(e) => updateField("sex", e.target.value)}
                 className="w-full rounded-xl border bg-background px-4 py-3 outline-none focus:border-cyan-400"
               >
-                <option value="prefer_not_to_say">
-                  Prefer not to say
-                </option>
+                <option value="prefer_not_to_say">Prefer not to say</option>
 
-                <option value="male">
-                  Male
-                </option>
+                <option value="male">Male</option>
 
-                <option value="female">
-                  Female
-                </option>
+                <option value="female">Female</option>
 
-                <option value="other">
-                  Other
-                </option>
+                <option value="other">Other</option>
               </select>
             </div>
 
@@ -214,12 +166,7 @@ export function OnboardingForm() {
                 <input
                   type="number"
                   value={form.heightCm}
-                  onChange={(e) =>
-                    updateField(
-                      "heightCm",
-                      e.target.value,
-                    )
-                  }
+                  onChange={(e) => updateField("heightCm", e.target.value)}
                   placeholder="170"
                   className="w-full rounded-xl border bg-background px-4 py-3 outline-none focus:border-cyan-400"
                 />
@@ -233,12 +180,7 @@ export function OnboardingForm() {
                 <input
                   type="number"
                   value={form.weightKg}
-                  onChange={(e) =>
-                    updateField(
-                      "weightKg",
-                      e.target.value,
-                    )
-                  }
+                  onChange={(e) => updateField("weightKg", e.target.value)}
                   placeholder="70"
                   className="w-full rounded-xl border bg-background px-4 py-3 outline-none focus:border-cyan-400"
                 />
@@ -250,13 +192,12 @@ export function OnboardingForm() {
         {step === 1 && (
           <div className="space-y-6">
             <div>
-              <h1 className="text-2xl font-bold">
-                How active are you?
-              </h1>
+              <h1 className="text-2xl font-bold">How active are you?</h1>
 
               <p className="mt-2 text-muted-foreground">
-                We'll factor your activity into your
-                hydration recommendation.
+                {
+                  "We'll factor your activity into your hydration recommendation."
+                }
               </p>
             </div>
 
@@ -265,41 +206,30 @@ export function OnboardingForm() {
                 {
                   value: "low",
                   label: "Low",
-                  description:
-                    "Mostly sitting or light daily activity",
+                  description: "Mostly sitting or light daily activity",
                 },
                 {
                   value: "moderate",
                   label: "Moderate",
-                  description:
-                    "Regular walking or exercise",
+                  description: "Regular walking or exercise",
                 },
                 {
                   value: "high",
                   label: "High",
-                  description:
-                    "Frequent or intense exercise",
+                  description: "Frequent or intense exercise",
                 },
               ].map((option) => (
                 <button
                   key={option.value}
                   type="button"
-                  onClick={() =>
-                    updateField(
-                      "activityLevel",
-                      option.value,
-                    )
-                  }
+                  onClick={() => updateField("activityLevel", option.value)}
                   className={`rounded-2xl border p-4 text-left transition ${
-                    form.activityLevel ===
-                    option.value
+                    form.activityLevel === option.value
                       ? "border-cyan-400 bg-cyan-400/10"
                       : "hover:bg-muted/50"
                   }`}
                 >
-                  <p className="font-semibold">
-                    {option.label}
-                  </p>
+                  <p className="font-semibold">{option.label}</p>
 
                   <p className="mt-1 text-sm text-muted-foreground">
                     {option.description}
@@ -318,12 +248,7 @@ export function OnboardingForm() {
                 min="0"
                 max="600"
                 value={form.exerciseMinutes}
-                onChange={(e) =>
-                  updateField(
-                    "exerciseMinutes",
-                    e.target.value,
-                  )
-                }
+                onChange={(e) => updateField("exerciseMinutes", e.target.value)}
                 className="w-full rounded-xl border bg-background px-4 py-3 outline-none focus:border-cyan-400"
               />
             </div>
@@ -333,13 +258,10 @@ export function OnboardingForm() {
         {step === 2 && (
           <div className="space-y-6">
             <div>
-              <h1 className="text-2xl font-bold">
-                Tell us about your day
-              </h1>
+              <h1 className="text-2xl font-bold">Tell us about your day</h1>
 
               <p className="mt-2 text-muted-foreground">
-                This helps us eventually schedule smarter
-                reminders.
+                This helps us eventually schedule smarter reminders.
               </p>
             </div>
 
@@ -351,12 +273,7 @@ export function OnboardingForm() {
               <input
                 type="time"
                 value={form.wakeTime}
-                onChange={(e) =>
-                  updateField(
-                    "wakeTime",
-                    e.target.value,
-                  )
-                }
+                onChange={(e) => updateField("wakeTime", e.target.value)}
                 className="w-full rounded-xl border bg-background px-4 py-3 outline-none focus:border-cyan-400"
               />
             </div>
@@ -369,24 +286,15 @@ export function OnboardingForm() {
               <input
                 type="time"
                 value={form.sleepTime}
-                onChange={(e) =>
-                  updateField(
-                    "sleepTime",
-                    e.target.value,
-                  )
-                }
+                onChange={(e) => updateField("sleepTime", e.target.value)}
                 className="w-full rounded-xl border bg-background px-4 py-3 outline-none focus:border-cyan-400"
               />
             </div>
 
             <div className="rounded-2xl bg-muted/50 p-4">
-              <p className="text-sm text-muted-foreground">
-                Detected timezone
-              </p>
+              <p className="text-sm text-muted-foreground">Detected timezone</p>
 
-              <p className="mt-1 font-medium">
-                {form.timezone}
-              </p>
+              <p className="mt-1 font-medium">{form.timezone}</p>
             </div>
           </div>
         )}
@@ -397,14 +305,12 @@ export function OnboardingForm() {
               💧
             </div>
 
-            <h1 className="mt-6 text-3xl font-bold">
-              Your AquaAI goal
-            </h1>
+            <h1 className="mt-6 text-3xl font-bold">{"Your AquaAI goal"}</h1>
 
             <p className="mx-auto mt-3 max-w-md text-muted-foreground">
-              Based on the information you've provided,
-              AquaAI has calculated an initial hydration
-              target.
+              {
+                "Based on the information you've provided, AquaAI has calculated an initial hydration target."
+              }
             </p>
 
             <div className="mt-8 rounded-3xl bg-muted/50 p-8">
@@ -417,8 +323,9 @@ export function OnboardingForm() {
               </p>
 
               <p className="mt-3 text-sm text-muted-foreground">
-                We'll refine your recommendations as AquaAI
-                learns your habits.
+                {
+                  "We'll refine your recommendations as AquaAI learns your habits."
+                }
               </p>
             </div>
 
@@ -457,9 +364,7 @@ export function OnboardingForm() {
               disabled={isPending}
               className="rounded-xl bg-cyan-400 px-5 py-3 font-semibold text-slate-950 disabled:opacity-50"
             >
-              {isPending
-                ? "Setting up..."
-                : "Finish setup"}
+              {isPending ? "Setting up..." : "Finish setup"}
             </button>
           )}
         </div>
